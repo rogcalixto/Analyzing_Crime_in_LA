@@ -1,7 +1,7 @@
-## Crime Data Analysis
+# Crime Data Analysis
 This project explores the crimes.csv dataset to identify patterns and answer specific questions about the frequency and characteristics of crimes.
 
-# Objectives
+## Objectives
 The main objectives of this project are to:
 
 Determine the hour with the highest frequency of crimes.
@@ -10,7 +10,7 @@ Identify the area with the largest frequency of night crimes (crimes committed b
 
 Analyze the number of crimes committed against victims in different age groups.
 
-# Key Variables
+## Key Variables
 Peak Crime Hour: The hour with the highest frequency of crimes.
 Variable: peak_crime_hour (integer)
 
