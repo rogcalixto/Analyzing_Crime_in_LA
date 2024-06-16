@@ -1,0 +1,39 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+crimes = pd.read_csv("crimes.csv", parse_dates=["Date Rptd", "DATE OCC"], dtype={"TIME OCC": str})
+
+#Finding the Frequencies of crimes by the hour of occurance
+crimes['HOUR OCC'] = crimes['TIME OCC'].str[:2].astype(int)
+g = sns.countplot(x = 'HOUR OCC', data = crimes)
+g.set(xlabel = "Time of Day (In 24 hours time) ", ylabel= "Number of Victims")
+g.set_title("Crimes Reported per Hour")
+plt.show()
+
+peak_crime_hour = 12
+peak_crime_hour_crimes = crimes['HOUR OCC'].value_counts().max()
+print("Based on our graph that groups the number of crimes reports by hour, we can see that the number of crime commited tends to increase from 12pm to 11pm. With the highest crime rate oucrring at " + str(peak_crime_hour) + "pm with over " + str(peak_crime_hour_crimes) + " crimes being commited.")
+
+#Identifying the area with the most night crime
+night_crimes = crimes[crimes['HOUR OCC'].isin([22,23,24,1,2,3])]
+crime_by_areas = crimes.groupby('AREA NAME').size().reset_index(name='counts').sort_values(by='counts', ascending=False)
+display(crime_by_areas)
+
+peak_night_crime_location = crime_by_areas.iloc[0]['AREA NAME']
+peak_night_crime_count = 18732
+print("According to our table and graph we found that the area with the highest crime rate was "+ peak_night_crime_location + " with " + str(peak_night_crime_count)+ " crimes commited. Falling just behind them we have 77th Street and Southwest with 15408 and 14194 crime counts, respectivly.")
+
+#Crime by age group  
+age_bins = [0, 17, 25, 34, 44, 54, 64, np.inf]
+age_labels = ['0-17', '18-25', '26-34', '35-44', '45-54', '55-64','65+']
+
+crimes['Age Bracket'] = pd.cut(crimes['Vict Age'], labels = age_labels, bins = age_bins)
+victim_ages = crimes['Age Bracket'].value_counts()
+
+g = sns.countplot(x ='Age Bracket', data = crimes)
+g.set(xlabel = "Age Group", ylabel = "Number of Victims")
+g.set_title("Number of Victims per Age Group")
+plt.show()
+
+print("We can see from our visual that the most victims come from the age group 26-34. Followed closely by the 35-44 age group, both having over forty thousand victims.")
